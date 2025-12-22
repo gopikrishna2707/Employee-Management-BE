@@ -20,7 +20,9 @@ public interface EmployeeMapper {
 
     List<EmployeeInitialDto> toInitialDto(List<EmployeeModel> employeeInitialModelList);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+//    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "eid", ignore = true)
     void updateEmployeeDetailsFromDto(EmployeeDto dto, @MappingTarget EmployeeModel entity);
 }

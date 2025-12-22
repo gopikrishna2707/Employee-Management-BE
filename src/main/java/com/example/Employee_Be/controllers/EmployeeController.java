@@ -30,9 +30,9 @@ public class EmployeeController {
         return employeeService.getEmployeeBasicDetails();
     }
 
-    @Validated
+
     @PostMapping("employees")
-    public EmployeeDto addEmployee(@Valid @RequestBody EmployeeDto employeeDetails){
+    public EmployeeDto addEmployee(@RequestBody EmployeeDto employeeDetails){
         return employeeService.addEmployee(employeeDetails);
     }
 

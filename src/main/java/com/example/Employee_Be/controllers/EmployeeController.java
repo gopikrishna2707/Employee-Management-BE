@@ -10,7 +10,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @Validated
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://gopikrishna2707.github.io/Employee-Management---FE/")
 public class EmployeeController {
 
     EmployeeServiceImpl employeeService;

@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api")
 @Validated
 //@CrossOrigin(origins = "http://localhost:4200")
-@CrossOrigin(origins = "https://gopikrishna2707.github.io/Employee-Management---FE/")
+@CrossOrigin(origins = "https://gopikrishna2707.github.io/Employee-Management---FE")
 public class EmployeeController {
 
     EmployeeServiceImpl employeeService;

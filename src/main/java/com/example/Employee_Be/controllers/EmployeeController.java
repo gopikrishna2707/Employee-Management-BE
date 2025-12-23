@@ -10,8 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @Validated
-//@CrossOrigin(origins = "http://localhost:4200")
-@CrossOrigin(origins = "https://gopikrishna2707.github.io")
+@CrossOrigin(origins = {"https://gopikrishna2707.github.io", "http://localhost:4200"})
 public class EmployeeController {
 
     EmployeeServiceImpl employeeService;

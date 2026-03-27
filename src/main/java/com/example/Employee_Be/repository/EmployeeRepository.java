@@ -19,15 +19,10 @@ public interface EmployeeRepository extends JpaRepository<EmployeeModel, Long> {
 
     void deleteByEid(String eid);
 
-//    Page<EmployeeModel> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
-//            String q1, String q2, String q3, String q4, Pageable pageable
-//    );
-
-
     @Query(value = """
            SELECT *
            FROM employees
-              LOWER(name)  LIKE LOWER(CONCAT('%', :value, '%'))
+              where LOWER(name)  LIKE LOWER(CONCAT('%', :value, '%'))
               OR LOWER(email) LIKE LOWER(CONCAT('%', :value, '%'))
            """,
             nativeQuery = true)

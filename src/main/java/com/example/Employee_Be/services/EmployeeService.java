@@ -23,8 +23,5 @@ public interface EmployeeService {
     //search employee based on id
     EmployeeDto updateEmployeeById(String eid, EmployeeDto employeeDto);
 
-    //for pagination purpose
-    /*Page<EmployeeModel> searchEmployeeBasics(String q, int page, int size, String sortBy, Sort.Direction direction);*/
-
     List<EmployeeInitialDto> searchEmployees(String value);
 }

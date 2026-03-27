@@ -4,6 +4,7 @@ import com.example.Employee_Be.dto.EmployeeInitialDto;
 import com.example.Employee_Be.exception.EmployeeException;
 import com.example.Employee_Be.mapper.EmployeeMapper;
 import com.example.Employee_Be.models.EmployeeModel;
+import com.example.Employee_Be.repository.AttendanceRepository;
 import com.example.Employee_Be.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.*;
@@ -17,10 +18,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     EmployeeRepository employeeRepository;
     EmployeeMapper employeeMapper;
 
+    AttendanceRepository attendanceRepository;
+
+
     //injecting beans of repos
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper){
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, AttendanceRepository attendanceRepository){
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
+        this.attendanceRepository = attendanceRepository;
     }
 
     //get all employees
@@ -38,6 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     //Add new Employee
+    @Transactional
     @Override
     public EmployeeDto addEmployee(EmployeeDto employeeDto) {
 
@@ -49,6 +55,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         EmployeeModel savingDetails = employeeRepository.save(entity);
 
+
+
         return employeeMapper.toDto(savingDetails);
     }
 
@@ -58,34 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.toInitialDto(employeeDtoList);
     }
 
-
-    //for pagination purpose
-    /*public Page<EmployeeInitialDto> getEmployeeBasicDetails(
-            int page,
-            int size,
-            String sortBy,
-            Sort.Direction direction
-    ) {
-        // Default sorting by "id" ascending if not provided
-        String sortProperty = (sortBy == null || sortBy.isBlank()) ? "id" : sortBy;
-        Sort sort = Sort.by(direction == null ? Sort.Direction.ASC : direction, sortProperty);
-
-        Pageable pageable = PageRequest.of(page, size, sort);
-
-        Page<EmployeeModel> employeePage = employeeRepository.findAll(pageable);
-
-        // Map content while preserving page metadata
-        List<EmployeeInitialDto> data  = employeeMapper.toInitialDto(employeePage.getContent());
-
-        return new PageImpl<>(
-                data,
-                pageable,
-                employeePage.getTotalElements()
-        );
-    }*/
-
-
-        @Override
+    @Override
     public EmployeeDto findEmployeeByEid(String eid) {
         return employeeRepository.findByEid(eid)
                 .map(employeeMapper::toDto)
@@ -104,13 +85,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public EmployeeDto updateEmployeeById(String eid, EmployeeDto dto) {
         EmployeeModel employeeModel = employeeRepository.findByEid(eid)
                 .orElseThrow(() -> new EmployeeException("Not found the id"));
-
-        if(dto.getName().isEmpty() || dto.getEmail().isEmpty()){
-            throw new EmployeeException("name and email cant be null");
-        }
 
         if(dto.getCurrentlyWorking().isEmpty()){
             throw new EmployeeException("employee current working is mandatory");
@@ -126,27 +104,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeInitialDto> searchEmployees(String value) {
 
-            List<EmployeeModel> fileteredList = employeeRepository
-                    .searchFlexible(value);
+        List<EmployeeModel> fileteredList = employeeRepository
+                .searchFlexible(value);
 
-            return employeeMapper.toInitialDto(fileteredList);
+        return employeeMapper.toInitialDto(fileteredList);
 
     }
-
-    /*@Override
-    public Page<EmployeeModel> searchEmployeeBasics(String q, int page, int size, String sortBy, Sort.Direction direction) {
-
-        int safePage = Math.max(page, 0);
-        int safeSize = Math.min(Math.max(size, 1), 100);
-        String safeSortBy = (sortBy == null || sortBy.isBlank()) ? "Id" : sortBy;
-
-        var pageable = PageRequest.of(safePage, safeSize, Sort.by(direction, safeSortBy));
-
-
-        return employeeRepository
-                .findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
-                        q, q, q, q, pageable
-                );
-    }*/
-
 }
